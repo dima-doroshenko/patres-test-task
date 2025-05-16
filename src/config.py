@@ -18,7 +18,7 @@ class DataBase(BaseModel):
     @property
     def url(self) -> str:
         """URL для подключения SQLAlchemy"""
-        return f"{self.driver}:\\{self.file}"
+        return f"{self.driver}:///{self.file}"
 
     @property
     def abs_path(self) -> Path:
