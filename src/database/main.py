@@ -10,7 +10,7 @@ class Base(DeclarativeBase): ...
 
 
 engine = create_async_engine(config.db.url)
-session_factory = async_sessionmaker(engine)
+session_factory = async_sessionmaker(engine, autoflush=config.db.autoflush, expire_on_commit=config.db.expire_on_commit)
 
 
 @asynccontextmanager

@@ -17,6 +17,9 @@ class DataBase(BaseModel):
     file: str = "database.db"
     driver: str = "sqlite+aiosqlite"
 
+    autoflush: bool = False
+    expire_on_commit: bool = False
+
     @property
     def url(self) -> str:
         """URL для подключения SQLAlchemy"""
