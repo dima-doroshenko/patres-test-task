@@ -17,6 +17,7 @@ async def register(
     user = await crud.create_user(email=schema.email, password=schema.password)
     return login(user)
 
+
 @router.post("/login")
 def login(user: User = Depends(validate_auth_user)) -> TokenInfo:
     access_token = auth.create_access_token(user)

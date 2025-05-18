@@ -21,7 +21,7 @@ class Crud:
 
     async def get_user_by_email(self, email: str) -> User | None:
         query = select(UsersOrm).where(UsersOrm.email == email)
-        if (obj := await self.session.scalar(query)):
+        if obj := await self.session.scalar(query):
             return User(self, obj)
 
     async def create_user(self, email: str, password: str) -> User:
