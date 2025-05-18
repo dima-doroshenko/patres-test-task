@@ -18,12 +18,7 @@ class ReadersOrm(Base):
     name: Mapped[str] = mapped_column(String(200), nullable=True)
     email: Mapped[str] = mapped_column(String(50), unique=True)
 
-    borrow_records: Mapped[list["BorrowedBooksOrm"]] = relationship(
+    borrowed_book_records: Mapped[list["BorrowedBooksOrm"]] = relationship(
         back_populates="reader",
-        lazy="selectin"
-    )
-    borrowed_books: Mapped[list["BooksOrm"]] = relationship(
-        secondary="borrowed_books",
-        viewonly=True,
-        lazy="selectin"
+        lazy="selectin",
     )
