@@ -3,9 +3,8 @@ from pydantic import BaseModel
 
 from pathlib import Path
 
-from src.utils.auth import types as AuthTypes
 
-BASEDIR = Path(__file__).resolve().parent
+BASEDIR = Path(__file__).resolve().parent.parent
 
 
 class App(BaseModel):
@@ -39,8 +38,8 @@ class AuthJwt(BaseModel):
     refresh_token_expire_days: int = 30
 
     token_type_field: str = "type"
-    access_token_type: AuthTypes.TokenType = "access"
-    refresh_token_type: AuthTypes.TokenType = "refresh"
+    access_token_type: str = "access"
+    refresh_token_type: str = "refresh"
 
 
 class Auth(BaseModel):
