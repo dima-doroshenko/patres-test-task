@@ -25,6 +25,6 @@ def login(user: User = Depends(validate_auth_user)) -> TokenInfo:
 
 
 @router.post("/refresh", response_model_exclude_none=True)
-def refresh(user: auth.get_current_user_for_refresh):
+def refresh(user: auth.get_current_user_for_refresh) -> TokenInfo:
     access_token = auth.create_access_token(user)
     return TokenInfo(access_token=access_token)
