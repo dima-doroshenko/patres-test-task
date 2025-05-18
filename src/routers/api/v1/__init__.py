@@ -18,3 +18,11 @@ router.include_router(
     prefix="/books",
     tags=["Books"],
 )
+
+from .readers import router as readers_router
+
+router.include_router(
+    readers_router,
+    prefix="/readers",
+    tags=["Readers"],
+)
