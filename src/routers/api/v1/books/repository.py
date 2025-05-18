@@ -43,10 +43,8 @@ class Repository:
             .values(**schema.model_dump())
         )
 
-        try:
-            await self.session.execute(stmt)
-        except Exception as err:
-            raise BookNotFoundException(44)
+        await self.session.execute(stmt)
+
 
     async def get_book(self, book_id: int) -> BooksOrm:
         if obj := await self.session.get(BooksOrm, book_id):
