@@ -20,13 +20,8 @@ class BookReadSchema(BaseModel):
     amount: int
 
 
-class BookUpdateSchema(BaseModel):
+class BookUpdateSchema(BookCreateSchema):
     id: int = Field(gt=0)
-    title: str | None = Field(None, max_length=200)
-    author: str | None = Field(None, max_length=200)
-    year: int | None = None
-    isbn: str | None = Field(None, max_length=20)
-    amount: int | None = Field(None, ge=0)
 
 
 class BookIdResponse(OkResponse):
