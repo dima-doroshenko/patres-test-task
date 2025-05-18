@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.post("/")
-async def create_rereader(
+async def create_reader(
     repo: get_repository, schema: ReaderCreateSchema
 ) -> ReaderIdResponse:
     reader_id = await repo.create_reader(schema)
