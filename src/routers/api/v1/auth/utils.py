@@ -3,6 +3,7 @@ from fastapi import Form, Depends
 from src.repository import Crud
 from src.utils import UnauthedException
 
+
 async def validate_auth_user(
     username: str = Form(),
     password: str = Form(),

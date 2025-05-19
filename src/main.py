@@ -10,14 +10,13 @@ app = FastAPI(
     title=config.app.title,
 )
 
+
 @app.exception_handler(HTTPException)
 async def handle_httpexception(request: Request, exc: HTTPException):
     return JSONResponse(
-        ExceptionResponse(
-            status=exc.status_code,
-            detail=exc.detail
-        ).model_dump(),
-        status_code=exc.status_code
+        ExceptionResponse(status=exc.status_code, detail=exc.detail).model_dump(),
+        status_code=exc.status_code,
     )
+
 
 app.include_router(router)

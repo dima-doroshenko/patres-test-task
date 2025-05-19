@@ -45,7 +45,6 @@ class BooksRepository:
 
         await self.session.execute(stmt)
 
-
     async def get_book(self, book_id: int) -> BooksOrm:
         if obj := await self.session.get(BooksOrm, book_id):
             return obj
