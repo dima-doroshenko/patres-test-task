@@ -1,15 +1,15 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update
 
-from src.utils import get_current_user
 from src.database.models import ReadersOrm
+from src.utils import get_current_user
 
+from .exc import ReaderNotFoundException, NotUniqueReaderException
 from .schemas import ReaderCreateSchema, ReaderUpdateSchema
-from .exc import ReaderNotFoundException
 
 
 class ReadersRepository:
@@ -25,10 +25,7 @@ class ReadersRepository:
         try:
             await self.session.flush()
         except IntegrityError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="User with same email is already exists",
-            )
+            raise NotUniqueReaderException
 
         return obj.id
 

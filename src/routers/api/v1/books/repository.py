@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import HTTPException, status, Depends
+from fastapi import Depends
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update, select
@@ -8,8 +8,8 @@ from sqlalchemy import update, select
 from src.database.models import BooksOrm
 from src.utils import get_current_user
 
+from .exc import BookNotFoundException, NotUniqueBookException
 from .schemas import BookCreateSchema, BookUpdateSchema
-from .exc import BookNotFoundException
 
 
 class BooksRepository:
@@ -24,10 +24,7 @@ class BooksRepository:
         try:
             await self.session.flush()
         except IntegrityError:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Book with same title or ISBN is already exists",
-            )
+            raise NotUniqueBookException
 
         return obj.id
 
