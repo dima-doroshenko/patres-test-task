@@ -50,12 +50,11 @@ class LogicReposiory:
 
         obj = BorrowedBooksOrm(book_id=book_id, reader_id=reader_id)
         self.session.add(obj)
-        
+
         book.amount -= 1
 
     async def return_book(self, book_id: int, reader_id: int) -> None:
-
-        reader = await self._get_reader(reader_id)
+        await self._get_reader(reader_id)
         book = await self._get_book(book_id)
 
         query = (

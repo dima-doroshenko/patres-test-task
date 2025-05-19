@@ -34,7 +34,6 @@ class BooksRepository:
         return obj.id
 
     async def update_book(self, schema: BookUpdateSchema) -> None:
-
         await self.get_book(schema.id)
 
         stmt = (

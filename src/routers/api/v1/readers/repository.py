@@ -2,12 +2,13 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy import update
 
 from src.utils import get_current_user
 from src.database.models import ReadersOrm
 
-from .schemas import ReaderCreateSchema, ReaderReadSchema, ReaderUpdateSchema, ReaderIdResponse
+from .schemas import ReaderCreateSchema, ReaderUpdateSchema
 from .exc import ReaderNotFoundException
 
 
@@ -20,20 +21,18 @@ class ReadersRepository:
     async def create_reader(self, schema: ReaderCreateSchema) -> int:
         obj = ReadersOrm(**schema.model_dump())
         self.session.add(obj)
+
         try:
             await self.session.flush()
-        except Exception as err:
-            if "UNIQUE" in str(err):
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="User with same email is already exists",
-                )
-            raise err
+        except IntegrityError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User with same email is already exists",
+            )
 
         return obj.id
 
     async def update_reader(self, schema: ReaderUpdateSchema) -> None:
-
         await self.get_reader(schema.id)
 
         stmt = (
