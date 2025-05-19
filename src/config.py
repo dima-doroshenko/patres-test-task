@@ -29,9 +29,18 @@ class DataBase(BaseModel):
         return f"{self.driver}:///{self.file}"
 
     @property
+    def test_url(self) -> str:
+        """URL для тестов"""
+        return f"{self.driver}:///test_{self.file}"
+
+    @property
     def abs_path(self) -> Path:
         """Абсолютный путь к файлу БД"""
         return BASEDIR / self.file
+
+    @property
+    def test_abs_path(self) -> Path:
+        return BASEDIR / f"test_{self.file}"
 
 
 class AuthJwt(BaseModel):
