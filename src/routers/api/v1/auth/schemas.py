@@ -9,22 +9,14 @@ class TokenInfo(BaseModel):
     token_type: str = "Bearer"
 
 
-class _Password(BaseModel):
+class UserLoginSchema(BaseModel):
+    email: EmailStr
     password: str = Field(min_length=8)
 
 
-class _Email(BaseModel):
-    email: EmailStr
-
-
-class _ID(BaseModel):
+class UserReadSchema(BaseModel):
     id: int = Field(ge=1)
-
-
-class UserLoginSchema(_Password, _Email): ...
-
-
-class UserReadSchema(_Email, _ID):
+    email: EmailStr
     created_at: datetime
 
 
