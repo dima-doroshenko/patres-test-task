@@ -1,8 +1,8 @@
 from fastapi import HTTPException, status
 
-ReaderNotFoundException = lambda book_id: HTTPException(
+ReaderNotFoundException = lambda reader_id: HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
-    detail=f"Reader with id {book_id} not found",
+    detail=f"Reader with id {reader_id} not found",
 )
 
 NotUniqueReaderException = HTTPException(
