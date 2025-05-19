@@ -4,7 +4,7 @@ from src.repository import Crud, User
 from src.utils import auth
 
 from .utils import validate_auth_user
-from .schemas import TokenInfo, UserLoginSchema
+from .schemas import TokenInfo, UserLoginSchema, UserReadSchema
 
 router = APIRouter()
 
@@ -29,3 +29,10 @@ def login(user: User = Depends(validate_auth_user)) -> TokenInfo:
 def refresh(user: auth.get_current_user_for_refresh) -> TokenInfo:
     access_token = auth.create_access_token(user)
     return TokenInfo(access_token=access_token)
+
+
+@router.get("/me")
+async def get_me(
+    user: auth.get_current_user, crud: Crud = Depends(Crud)
+) -> UserReadSchema:
+    return await crud.get_user(user.id)
