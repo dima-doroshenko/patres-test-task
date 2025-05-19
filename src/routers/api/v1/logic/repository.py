@@ -7,6 +7,7 @@ from sqlalchemy import select
 
 from src.database.models import BorrowedBooksOrm, BooksOrm
 from src.utils import get_current_user
+from src.config import config
 
 from src.routers.api.v1.readers.repository import ReadersRepository
 from src.routers.api.v1.books.repository import BooksRepository
@@ -39,7 +40,7 @@ class LogicReposiory:
             [r for r in reader.borrowed_book_records if not r.return_date]
         )
 
-        if amount_of_not_returned_books >= 3:
+        if amount_of_not_returned_books >= config.library.book_borrowing_limit:
             raise TakingBookLimitException
 
         book = await self._get_book(book_id)

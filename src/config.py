@@ -7,6 +7,10 @@ from pathlib import Path
 BASEDIR = Path(__file__).resolve().parent.parent
 
 
+class Library(BaseModel):
+    book_borrowing_limit: int = 3
+
+
 class App(BaseModel):
     title: str = "LibraryAPI"
     debug: bool = True
@@ -51,6 +55,7 @@ class Settings(BaseSettings):
     db: DataBase = DataBase()
     auth_jwt: AuthJwt = AuthJwt()
     auth: Auth = Auth()
+    library: Library = Library()
 
 
 config = Settings()
