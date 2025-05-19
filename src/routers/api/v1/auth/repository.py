@@ -17,10 +17,8 @@ class UsersRepository:
     def __init__(self, session: get_session):
         self.session = session
 
-    async def get_user(self, *args, **filter) -> UsersOrm:
-        if len(args) == 1 and filter is None:
-            filter = {"id": args[0]}
-        query = select(UsersOrm).filter_by(**filter)
+    async def get_user(self, **filter_by) -> UsersOrm:
+        query = select(UsersOrm).filter_by(**filter_by)
         if obj := await self.session.scalar(query):
             return obj
         raise UserNotFoundException

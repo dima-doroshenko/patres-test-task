@@ -34,4 +34,4 @@ def refresh(user: auth.get_current_user_for_refresh) -> TokenInfo:
 
 @router.get("/me")
 async def get_me(user: auth.get_current_user, repo: get_repository) -> UserReadSchema:
-    return await repo.get_user(user.id)
+    return await repo.get_user(id=user.id)
