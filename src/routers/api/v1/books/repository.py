@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import HTTPException, status, Depends
 
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import update, select, delete
+from sqlalchemy import update, select
 
 from src.database.models import BooksOrm
 from src.utils import get_current_user
@@ -23,13 +23,11 @@ class BooksRepository:
         self.session.add(obj)
         try:
             await self.session.flush()
-        except Exception as err:
-            if "UNIQUE" in str(err):
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Book with same title or ISBN is already exists",
-                )
-            raise err
+        except IntegrityError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Book with same title or ISBN is already exists",
+            )
 
         return obj.id
 
