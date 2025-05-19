@@ -50,6 +50,7 @@ class LogicReposiory:
 
         obj = BorrowedBooksOrm(book_id=book_id, reader_id=reader_id)
         self.session.add(obj)
+        
         book.amount -= 1
 
     async def return_book(self, book_id: int, reader_id: int) -> None:
@@ -64,7 +65,7 @@ class LogicReposiory:
             .where(BorrowedBooksOrm.return_date == None)
         )
 
-        objects = [_ for _ in await self.session.scalars(query)]
+        objects = list(await self.session.scalars(query))
 
         if not len(objects):
             raise ReaderDidNotTakeBookException
@@ -86,17 +87,7 @@ class LogicReposiory:
         return ReaderInfo(
             name=reader.name,
             email=reader.email,
-            borrowed_books=[
-                BookReadSchema(
-                    id=b.id,
-                    title=b.title,
-                    author=b.author,
-                    year=b.year,
-                    isbn=b.isbn,
-                    amount=b.amount,
-                )
-                for b in res.all()
-            ],
+            borrowed_books=[BookReadSchema(**book.as_dict()) for book in res.all()],
         )
 
 

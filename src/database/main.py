@@ -1,16 +1,19 @@
-from contextlib import asynccontextmanager
-
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
 from src.config import config
 
 
-class Base(DeclarativeBase): ...
+class Base(DeclarativeBase):
+
+    def as_dict(self) -> dict[str]:
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 engine = create_async_engine(config.db.url)
-session_factory = async_sessionmaker(engine, autoflush=config.db.autoflush, expire_on_commit=config.db.expire_on_commit)
+session_factory = async_sessionmaker(
+    engine, autoflush=config.db.autoflush, expire_on_commit=config.db.expire_on_commit
+)
 
 
 async def get_session():
