@@ -12,7 +12,7 @@ from .schemas import BookCreateSchema, BookUpdateSchema
 from .exc import BookNotFoundException
 
 
-class Repository:
+class BooksRepository:
 
     def __init__(self, user: get_current_user):
         self.user = user
@@ -60,4 +60,4 @@ class Repository:
         await self.session.delete(book)
 
 
-get_repository = Annotated[Repository, Depends(Repository)]
+get_repository = Annotated[BooksRepository, Depends(BooksRepository)]

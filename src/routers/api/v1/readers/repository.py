@@ -11,7 +11,7 @@ from .schemas import ReaderCreateSchema, ReaderReadSchema, ReaderUpdateSchema, R
 from .exc import ReaderNotFoundException
 
 
-class Repository:
+class ReadersRepository:
 
     def __init__(self, user: get_current_user):
         self.user = user
@@ -54,4 +54,4 @@ class Repository:
         await self.session.delete(reader)
 
 
-get_repository = Annotated[Repository, Depends(Repository)]
+get_repository = Annotated[ReadersRepository, Depends(ReadersRepository)]
