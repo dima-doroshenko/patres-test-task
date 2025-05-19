@@ -14,6 +14,7 @@ from httpx import AsyncClient, ASGITransport
 import pytest
 
 from src.routers.api.v1.auth.repository import UsersRepository
+from src.routers.api.v1.auth.schemas import UserLoginSchema
 from src.database.models import BooksOrm, ReadersOrm
 from src.database.main import _get_session, Base
 from src.utils.auth import create_access_token
@@ -52,7 +53,9 @@ async def prepare_database():
     async with session_factory() as session:
         [session.add(obj) for obj in objects]
         repo = UsersRepository(session)
-        await repo.create_user("admin@example.com", "12345678")
+        await repo.create_user(
+            UserLoginSchema(email="admin@example.com", password="12345678")
+        )
         await session.commit()
 
     yield

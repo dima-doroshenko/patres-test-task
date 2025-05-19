@@ -11,11 +11,8 @@ router = APIRouter()
 
 
 @router.post("/register")
-async def register(
-    repo: get_repository,
-    schema: UserLoginSchema,
-) -> TokenInfo:
-    user = await repo.create_user(email=schema.email, password=schema.password)
+async def register(repo: get_repository, schema: UserLoginSchema) -> TokenInfo:
+    user = await repo.create_user(schema)
     return login(user)
 
 
@@ -33,5 +30,5 @@ def refresh(user: auth.get_current_user_for_refresh) -> TokenInfo:
 
 
 @router.get("/me")
-async def get_me(user: auth.get_current_user, repo: get_repository) -> UserReadSchema:
+async def get_me(repo: get_repository, user: auth.get_current_user) -> UserReadSchema:
     return await repo.get_user(id=user.id)
