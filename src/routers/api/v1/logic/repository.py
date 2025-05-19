@@ -37,7 +37,7 @@ class LogicReposiory:
         reader = await self._get_reader(reader_id)
 
         amount_of_not_returned_books = len(
-            [r for r in reader.borrowed_book_records if not r.return_date]
+            [None for r in reader.borrowed_book_records if not r.return_date]
         )
 
         if amount_of_not_returned_books >= config.library.book_borrowing_limit:
