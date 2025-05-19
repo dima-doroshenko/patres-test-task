@@ -1,4 +1,8 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from typing import Annotated
+
+from fastapi import Depends
+
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 
 from src.config import config
@@ -16,7 +20,7 @@ session_factory = async_sessionmaker(
 )
 
 
-async def get_session():
+async def _get_session():
     async with session_factory() as session:
         try:
             yield session
@@ -24,3 +28,6 @@ async def get_session():
         except Exception as e:
             await session.rollback()
             raise e
+
+
+get_session = Annotated[AsyncSession, Depends(_get_session)]

@@ -7,6 +7,7 @@ from sqlalchemy import update, select
 
 from src.database.models import BooksOrm
 from src.utils import get_current_user
+from src.database import get_session
 
 from .exc import BookNotFoundException, NotUniqueBookException
 from .schemas import BookCreateSchema, BookUpdateSchema
@@ -14,9 +15,9 @@ from .schemas import BookCreateSchema, BookUpdateSchema
 
 class BooksRepository:
 
-    def __init__(self, user: get_current_user):
+    def __init__(self, user: get_current_user, session: get_session):
         self.user = user
-        self.session = user.session
+        self.session = session
 
     async def create_book(self, schema: BookCreateSchema) -> int:
         obj = BooksOrm(**schema.model_dump())

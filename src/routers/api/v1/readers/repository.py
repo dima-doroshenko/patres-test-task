@@ -7,6 +7,7 @@ from sqlalchemy import update
 
 from src.database.models import ReadersOrm
 from src.utils import get_current_user
+from src.database import get_session
 
 from .exc import ReaderNotFoundException, NotUniqueReaderException
 from .schemas import ReaderCreateSchema, ReaderUpdateSchema
@@ -14,9 +15,9 @@ from .schemas import ReaderCreateSchema, ReaderUpdateSchema
 
 class ReadersRepository:
 
-    def __init__(self, user: get_current_user):
+    def __init__(self, user: get_current_user, session: get_session):
         self.user = user
-        self.session = user.session
+        self.session = session
 
     async def create_reader(self, schema: ReaderCreateSchema) -> int:
         obj = ReadersOrm(**schema.model_dump())

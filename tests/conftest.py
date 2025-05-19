@@ -13,12 +13,12 @@ from httpx import AsyncClient, ASGITransport
 
 import pytest
 
+from src.routers.api.v1.auth.repository import UsersRepository
 from src.database.models import BooksOrm, ReadersOrm
-from src.database.main import get_session, Base
+from src.database.main import _get_session, Base
+from src.utils.auth import create_access_token
 from src.config import config
 from src.main import app
-from src.repository.crud import Crud
-from src.utils.auth import create_access_token
 
 engine = create_async_engine(config.db.test_url, poolclass=NullPool)
 session_factory = async_sessionmaker(engine, expire_on_commit=False)
@@ -34,7 +34,7 @@ async def override_get_session() -> AsyncGenerator[AsyncSession, None]:
             raise e
 
 
-app.dependency_overrides[get_session] = override_get_session
+app.dependency_overrides[_get_session] = override_get_session
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -51,11 +51,12 @@ async def prepare_database():
 
     async with session_factory() as session:
         [session.add(obj) for obj in objects]
-        crud = Crud(session)
-        await crud.create_user("admin@example.com", "12345678")
+        repo = UsersRepository(session)
+        await repo.create_user("admin@example.com", "12345678")
         await session.commit()
 
     yield
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
@@ -79,8 +80,8 @@ async def aca():
         transport=ASGITransport(app), base_url=client.base_url
     ) as aca:
         async with session_factory() as session:
-            crud = Crud(session)
-            user = await crud.get_user_by_email(email="admin@example.com")
+            repo = UsersRepository(session)
+            user = await repo.get_user(email="admin@example.com")
 
         token = create_access_token(user)
         aca.headers["Authorization"] = f"Bearer {token}"

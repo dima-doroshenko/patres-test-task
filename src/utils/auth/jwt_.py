@@ -1,5 +1,4 @@
 from datetime import timedelta, datetime, UTC
-from typing import TYPE_CHECKING
 
 from fastapi import Depends, HTTPException, status
 
@@ -13,9 +12,7 @@ from src.utils.exc import (
     TokenExpiredException,
 )
 from src.utils.auth.types import Payload, TokenType
-
-if TYPE_CHECKING:
-    from src.repository import User
+from src.database.models import UsersOrm
 
 
 def encode_jwt(
@@ -61,7 +58,7 @@ def create_jwt(
     )
 
 
-def create_access_token(user: "User") -> str:
+def create_access_token(user: "UsersOrm") -> str:
     jwt_payload = {"sub": user.id}
     return create_jwt(
         token_data=jwt_payload,
@@ -70,7 +67,7 @@ def create_access_token(user: "User") -> str:
     )
 
 
-def create_refresh_token(user: "User") -> str:
+def create_refresh_token(user: "UsersOrm") -> str:
     jwt_payload = {"sub": user.id}
     return create_jwt(
         token_data=jwt_payload,

@@ -7,6 +7,7 @@ from sqlalchemy import select
 
 from src.database.models import BorrowedBooksOrm, BooksOrm
 from src.utils import get_current_user
+from src.database import get_session
 from src.config import config
 
 from src.routers.api.v1.readers.repository import ReadersRepository
@@ -23,15 +24,15 @@ from .exc import (
 
 class LogicReposiory:
 
-    def __init__(self, user: get_current_user):
+    def __init__(self, user: get_current_user, session: get_session):
         self.user = user
-        self.session = user.session
+        self.session = session
 
     async def _get_book(self, id: int):
-        return await BooksRepository(self.user).get_book(id)
+        return await BooksRepository(self.user, self.session).get_book(id)
 
     async def _get_reader(self, id: int):
-        return await ReadersRepository(self.user).get_reader(id)
+        return await ReadersRepository(self.user, self.session).get_reader(id)
 
     async def borrow_book(self, book_id: int, reader_id: int) -> None:
         reader = await self._get_reader(reader_id)

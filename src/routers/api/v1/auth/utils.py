@@ -1,15 +1,16 @@
 from fastapi import Form, Depends
 
-from src.repository import Crud
+from src.routers.api.v1.auth.repository import UsersRepository
+from src.utils.auth import check_password
 from src.utils import UnauthedException
 
 
 async def validate_auth_user(
     username: str = Form(),
     password: str = Form(),
-    crud: Crud = Depends(Crud),
+    repo: UsersRepository = Depends(UsersRepository),
 ):
-    user = await crud.get_user_by_email(username)
-    if (not user) or (not user.check_password(password)):
+    user = await repo.get_user(email=username)
+    if (not user) or (not check_password(password, user.hashed_password)):
         raise UnauthedException
     return user

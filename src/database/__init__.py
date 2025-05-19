@@ -1,1 +1,1 @@
-from .main import get_session
+from .main import get_session, _get_session
