@@ -26,3 +26,11 @@ router.include_router(
     prefix="/readers",
     tags=["Readers"],
 )
+
+from .logic import router as logic_router
+
+router.include_router(
+    logic_router,
+    prefix="/logic",
+    tags=["Logic"],
+)
