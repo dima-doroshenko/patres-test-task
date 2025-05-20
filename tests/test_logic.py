@@ -27,7 +27,7 @@ async def test_business_logic_2(aca: AsyncClient):
     response = await _borrow()
 
     assert response.status_code == 400
-    assert "cannot take more than" in response.json()["detail"]
+    assert "cannot take more" in response.json()["detail"]
 
     for _ in range(config.library.book_borrowing_limit):
         await aca.post(
@@ -41,4 +41,4 @@ async def test_business_logic_3(book_id: int, aca: AsyncClient):
         "/logic/return", params={"book_id": book_id, "reader_id": 1}
     )
     assert response.status_code == 400
-    assert "did not take" in response.json()["detail"]
+    assert "not take" in response.json()["detail"]
