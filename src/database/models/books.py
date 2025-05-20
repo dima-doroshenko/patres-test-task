@@ -13,6 +13,7 @@ class BooksOrm(Base):
     author: Mapped[str] = mapped_column(String(200))
     year: Mapped[int] = mapped_column(nullable=True)
     isbn: Mapped[str] = mapped_column(String(20), unique=True, nullable=True)
+    description: Mapped[str] = mapped_column(String(2000), default="")
     amount: Mapped[int] = mapped_column(default=1)
 
     __table_args__ = (
