@@ -58,14 +58,11 @@ class LogicReposiory:
         await self._get_reader(reader_id)
         book = await self._get_book(book_id)
 
-        query = (
-            select(BorrowedBooksOrm)
-            .where(BorrowedBooksOrm.book_id == book_id)
-            .where(BorrowedBooksOrm.reader_id == reader_id)
-            .where(BorrowedBooksOrm.return_date == None)
+        query = select(BorrowedBooksOrm).filter_by(
+            book_id=book_id, reader_id=reader_id, return_date=None
         )
 
-        objects = list(await self.session.scalars(query))
+        objects = tuple(await self.session.scalars(query))
 
         if not len(objects):
             raise ReaderDidNotTakeBookException

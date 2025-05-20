@@ -14,5 +14,5 @@ TakingBookLimitException = HTTPException(
 
 ReaderDidNotTakeBookException = HTTPException(
     status_code=status.HTTP_400_BAD_REQUEST,
-    detail="The reader did not take this book",
+    detail="The reader has not taken this book or has already returned it",
 )
