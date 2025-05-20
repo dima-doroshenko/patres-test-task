@@ -6,9 +6,7 @@ from src.config import config
 
 
 async def test_business_logic_1(aca: AsyncClient):
-
     response = await aca.post("/logic/borrow", params={"book_id": 1, "reader_id": 1})
-
     assert response.status_code == 400
     assert "is not available" in response.json()["detail"]
 
@@ -39,10 +37,8 @@ async def test_business_logic_2(aca: AsyncClient):
 
 @pytest.mark.parametrize("book_id", [3, 2])
 async def test_business_logic_3(book_id: int, aca: AsyncClient):
-
     response = await aca.post(
         "/logic/return", params={"book_id": book_id, "reader_id": 1}
     )
-
     assert response.status_code == 400
     assert "did not take" in response.json()["detail"]

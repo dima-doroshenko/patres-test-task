@@ -19,5 +19,4 @@ async def test_protected(url: str, method: str, ac: AsyncClient):
 
 async def test_protected_with_auth(aca: AsyncClient):
     response = await aca.get("/auth/me")
-
     assert response.status_code == 200
