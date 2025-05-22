@@ -17,30 +17,23 @@ class App(BaseModel):
 
 
 class DataBase(BaseModel):
-    file: str = "database.db"
-    driver: str = "sqlite+aiosqlite"
+    user: str = "postgres"
+    password: str = "postgres"
+    host: str = "postgres"
+    port: int = 5432
+    dbname: str = "postgres"
 
+    driver: str = "postgresql+asyncpg"
     autoflush: bool = False
     expire_on_commit: bool = False
 
     @property
     def url(self) -> str:
-        """URL для подключения SQLAlchemy"""
-        return f"{self.driver}:///{self.file}"
+        return f"{self.driver}://{self.user}:{self.password}@{self.host}:{self.port}/{self.dbname}"
 
     @property
     def test_url(self) -> str:
-        """URL для тестов"""
-        return f"{self.driver}:///test_{self.file}"
-
-    @property
-    def abs_path(self) -> Path:
-        """Абсолютный путь к файлу БД"""
-        return BASEDIR / self.file
-
-    @property
-    def test_abs_path(self) -> Path:
-        return BASEDIR / f"test_{self.file}"
+        return f"sqlite+aiosqlite:///test_database.db"
 
 
 class AuthJwt(BaseModel):
